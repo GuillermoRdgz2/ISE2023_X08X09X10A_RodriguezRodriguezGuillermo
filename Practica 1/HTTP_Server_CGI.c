@@ -13,6 +13,7 @@
 #include "rl_net.h"                     // Keil.MDK-Pro::Network:CORE
 
 #include "Board_LED.h"                  // ::Board Support:LED
+#include "lcd.h"
 
 #if      defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
 #pragma  clang diagnostic push
@@ -24,8 +25,8 @@ extern uint16_t AD_in (uint32_t ch);
 extern uint8_t  get_button (void);
 
 extern bool LEDrun;
-//extern char lcd_text[2][20+1];
-//extern osThreadId_t TID_Display;
+extern char lcd_text[2][20+1];
+extern osThreadId_t TID_Display;
 
 // Local variables.
 static uint8_t P2;
@@ -163,13 +164,15 @@ void netCGI_ProcessData (uint8_t code, const char *data, uint32_t len) {
       }
       else if (strncmp (var, "lcd1=", 5) == 0) {
         // LCD Module line 1 text
-//        strcpy (lcd_text[0], var+5);
-//        osThreadFlagsSet (TID_Display, 0x01);
+        strcpy (lcd_text[0], var+5);
+				LCD_Clean();
+        osThreadFlagsSet (TID_Display, 0x01);
       }
       else if (strncmp (var, "lcd2=", 5) == 0) {
         // LCD Module line 2 text
-//        strcpy (lcd_text[1], var+5);
-//        osThreadFlagsSet (TID_Display, 0x01);
+        strcpy (lcd_text[1], var+5);
+				LCD_Clean();
+        osThreadFlagsSet (TID_Display, 0x01);
       }
     }
   } while (data);
@@ -184,7 +187,7 @@ uint32_t netCGI_Script (const char *env, char *buf, uint32_t buflen, uint32_t *p
   const char *lang;
   uint32_t len = 0U;
   uint8_t id;
-//  static uint32_t adv;
+  static uint32_t adv;
   netIF_Option opt = netIF_OptionMAC_Address;
   int16_t      typ = 0;
 
@@ -337,10 +340,10 @@ uint32_t netCGI_Script (const char *env, char *buf, uint32_t buflen, uint32_t *p
       // LCD Module control from 'lcd.cgi'
       switch (env[2]) {
         case '1':
-//          len = (uint32_t)sprintf (buf, &env[4], lcd_text[0]);
+          len = (uint32_t)sprintf (buf, &env[4], lcd_text[0]);
           break;
         case '2':
-//          len = (uint32_t)sprintf (buf, &env[4], lcd_text[1]);
+          len = (uint32_t)sprintf (buf, &env[4], lcd_text[1]);
           break;
       }
       break;
@@ -349,23 +352,23 @@ uint32_t netCGI_Script (const char *env, char *buf, uint32_t buflen, uint32_t *p
       // AD Input from 'ad.cgi'
       switch (env[2]) {
         case '1':
-//          adv = AD_in (0);
-//          len = (uint32_t)sprintf (buf, &env[4], adv);
+          adv = AD_in (0);
+          len = (uint32_t)sprintf (buf, &env[4], adv);
           break;
         case '2':
-//          len = (uint32_t)sprintf (buf, &env[4], (double)((float)adv*3.3f)/4096);
+          len = (uint32_t)sprintf (buf, &env[4], (double)((float)adv*3.3f)/4096);
           break;
         case '3':
-//          adv = (adv * 100) / 4096;
-//          len = (uint32_t)sprintf (buf, &env[4], adv);
+          adv = (adv * 100) / 4096;
+          len = (uint32_t)sprintf (buf, &env[4], adv);
           break;
       }
       break;
 
     case 'x':
       // AD Input from 'ad.cgx'
-//      adv = AD_in (0);
-//      len = (uint32_t)sprintf (buf, &env[1], adv);
+      adv = AD_in (0);
+      len = (uint32_t)sprintf (buf, &env[1], adv);
       break;
 
     case 'y':
