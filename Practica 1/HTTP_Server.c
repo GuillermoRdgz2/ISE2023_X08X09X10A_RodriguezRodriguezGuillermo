@@ -43,6 +43,7 @@ char lcd_text[2][20+1] = { "LCD line 1",
 
 ADC_HandleTypeDef adchandle;
 int32_t val = 0;
+float voltage = 0;
 
 /* Thread IDs */
 osThreadId_t TID_Display;
@@ -56,12 +57,12 @@ __NO_RETURN void app_main (void *arg);
 
 /* Read analog inputs */
 uint16_t AD_in (uint32_t ch) {
-  //int32_t val = 0;
-	float voltage = 0;
+  int32_t val = 0;
+	
 
   if (ch == 0) {
-		voltage = ADC_getVoltage(&adchandle , 10 ); //get values from channel 10->ADC123_IN10
-		val = voltage;
+		val = ADC_getVoltage(&adchandle , 10 ); //get values from channel 10->ADC123_IN10
+		
 		//printf("Voltage: %d",val);
   }
   return ((uint16_t)val);
