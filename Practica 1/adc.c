@@ -66,7 +66,6 @@ float ADC_getVoltage(ADC_HandleTypeDef *hadc, uint32_t Channel)
 		HAL_StatusTypeDef status;
 
 		uint32_t raw = 0;
-		float voltage = 0;
 		 /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
   */
   sConfig.Channel = Channel;
