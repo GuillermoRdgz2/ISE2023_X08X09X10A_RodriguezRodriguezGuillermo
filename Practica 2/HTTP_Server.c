@@ -18,6 +18,10 @@
 #include "LCD.h"
 #include "adc.h"
 
+extern void RTC_CalendarShow(uint8_t *showtime, uint8_t *showdate);
+extern uint8_t aShowTime[50];
+extern uint8_t aShowDate[50];
+
 // Main stack size must be multiple of 8 Bytes
 #define APP_MAIN_STK_SZ (1024U)
 uint64_t app_main_stk[APP_MAIN_STK_SZ / 8];
@@ -96,12 +100,11 @@ static __NO_RETURN void Display (void *arg) {
 //  uint32_t x = 0;
 
   (void)arg;
+  
+  
 
   while(1) {
-
-		EscribeFrase(lcd_text[0],0);
-		EscribeFrase(lcd_text[1],1);
-		
+		RTC_CalendarShow(aShowTime,aShowDate);
 		Delay(250);
   }
 }
