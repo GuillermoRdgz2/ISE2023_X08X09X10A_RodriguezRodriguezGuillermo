@@ -128,3 +128,27 @@ void RTC_CalendarShow(uint8_t *showtime, uint8_t *showdate)
   EscribeFrase((char *)showtime,0);
   EscribeFrase((char *)showdate,1);
 }
+
+/**
+  * @brief  Set an alarm at and specified time that generates an interruption
+  * @param  hour: hour of the alarm in BCD format
+  * @param  minutes: minutes of the alarm in BCD format
+  * @param  seconds: seconds of the alarm in BCD format
+  * @retval None
+  */
+void RTC_SetAlarm(uint8_t hour, uint8_t minutes, uint8_t seconds)
+{
+  RTC_TimeTypeDef stimestructure;
+  RTC_AlarmTypeDef salarmstructure;
+  
+  stimestructure.Hours = hour;
+  stimestructure.Minutes = minutes;
+  stimestructure.Seconds = seconds;
+  stimestructure.TimeFormat = RTC_FORMAT_BCD;
+  
+  salarmstructure.AlarmTime = stimestructure;
+  
+//  if(HAL_RTC_SetAlarm_IT(&RtcHandle,&salarmstructure,RTC_FORMAT_BCD){
+//    //Error code
+//  }
+}

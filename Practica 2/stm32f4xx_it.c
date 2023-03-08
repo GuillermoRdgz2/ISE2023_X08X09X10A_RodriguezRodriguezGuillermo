@@ -42,7 +42,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32f4xx_it.h"
-
+#include "rtc.h"
 #ifdef _RTE_
 #include "RTE_Components.h"             /* Component selection */
 #endif
@@ -56,6 +56,7 @@
   */
 
 /* Private typedef -----------------------------------------------------------*/
+extern RTC_HandleTypeDef RtcHandle;
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
@@ -179,13 +180,26 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
-  * @brief  This function handles PPP interrupt request.
+  * @brief  This function handles RTC alarm interrupt request.
   * @param  None
   * @retval None
   */
-/*void PPP_IRQHandler(void)
+void RTC_Alarm_IRQHandler(void)
 {
-}*/
+  HAL_RTC_AlarmIRQHandler(&RtcHandle);
+}
+
+void HAL_RTC_AlarmIRQHandler(RTC_HandleTypeDef *RtcHandle)
+{
+  HAL_RTC_AlarmAEventCallback(RtcHandle);
+  
+}
+
+void HAL_RTC_AlarmAEventCallback(RTC_HandleTypeDef *RtcHandle)
+{
+  //IT callback code. Green LED blinks during seconds and restart the alarm to 1 minute before.
+}
+
 
 
 /**
