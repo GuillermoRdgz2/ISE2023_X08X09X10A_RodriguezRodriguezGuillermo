@@ -3,6 +3,7 @@
 
 /* RTC handler declaration */
 RTC_HandleTypeDef RtcHandle;
+RTC_AlarmTypeDef salarmstructure = {0};
 
 /* Buffers used for displaying Time and Date */
 uint8_t aShowTime[50] = {0};
@@ -14,7 +15,8 @@ uint8_t aShowDate[50] = {0};
   * @param  None
   * @retval None
   */
-void RTC_PeripheralConfig(void){
+void RTC_PeripheralConfig(void)
+{
   /*##-1- Configure the RTC peripheral #######################################*/
   /* Configure RTC prescaler and RTC data registers */
   /* RTC configured as follows:
@@ -62,6 +64,8 @@ void RTC_PeripheralConfig(void){
     /* Clear source Reset Flag */
     __HAL_RCC_CLEAR_RESET_FLAGS();
   }
+  
+  HAL_NVIC_EnableIRQ(RTC_Alarm_IRQn);
 }
 
 /**
@@ -75,11 +79,11 @@ void RTC_CalendarConfig(void)
   RTC_TimeTypeDef stimestructure;
 
   /*##-1- Configure the Date #################################################*/
-  /* Set Date: Tuesday February 18th 2014 */
+  /* Set Date */
   sdatestructure.Year = 0x23;
   sdatestructure.Month = RTC_MONTH_MARCH;
-  sdatestructure.Date = 0x8;
-  sdatestructure.WeekDay = RTC_WEEKDAY_WEDNESDAY;
+  sdatestructure.Date = 0x16;
+  sdatestructure.WeekDay = RTC_WEEKDAY_THURSDAY;
   
   if(HAL_RTC_SetDate(&RtcHandle,&sdatestructure,RTC_FORMAT_BCD) != HAL_OK)
   {
@@ -138,17 +142,33 @@ void RTC_CalendarShow(uint8_t *showtime, uint8_t *showdate)
   */
 void RTC_SetAlarm(uint8_t hour, uint8_t minutes, uint8_t seconds)
 {
-  RTC_TimeTypeDef stimestructure;
-  RTC_AlarmTypeDef salarmstructure;
   
-  stimestructure.Hours = hour;
-  stimestructure.Minutes = minutes;
-  stimestructure.Seconds = seconds;
-  stimestructure.TimeFormat = RTC_FORMAT_BCD;
+  salarmstructure.AlarmTime.Hours = hour;
+  salarmstructure.AlarmTime.Minutes = minutes;
+  salarmstructure.AlarmTime.Seconds = seconds;
   
-  salarmstructure.AlarmTime = stimestructure;
+  salarmstructure.Alarm = RTC_ALARM_A;
   
-//  if(HAL_RTC_SetAlarm_IT(&RtcHandle,&salarmstructure,RTC_FORMAT_BCD){
-//    //Error code
-//  }
+  salarmstructure.AlarmTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
+  salarmstructure.AlarmTime.TimeFormat = RTC_HOURFORMAT_24;
+  
+  salarmstructure.AlarmTime.StoreOperation = RTC_STOREOPERATION_SET;
+  
+  HAL_RTC_SetAlarm_IT(&RtcHandle,&salarmstructure,RTC_FORMAT_BCD);  
+}
+
+void RTC_SetMinutesAlarm(void)
+{
+  
+  salarmstructure.AlarmTime.Seconds = 0x00;
+  salarmstructure.AlarmMask = RTC_ALARMMASK_HOURS | RTC_ALARMMASK_MINUTES | RTC_ALARMMASK_DATEWEEKDAY;
+  
+  salarmstructure.Alarm = RTC_ALARM_A;
+  
+  salarmstructure.AlarmTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
+  salarmstructure.AlarmTime.TimeFormat = RTC_HOURFORMAT_24;
+  
+  salarmstructure.AlarmTime.StoreOperation = RTC_STOREOPERATION_SET;
+  
+  HAL_RTC_SetAlarm_IT(&RtcHandle,&salarmstructure,RTC_FORMAT_BCD);
 }

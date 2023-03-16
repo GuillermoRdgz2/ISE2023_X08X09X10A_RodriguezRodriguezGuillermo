@@ -110,6 +110,25 @@ static __NO_RETURN void Display (void *arg) {
 }
 
 /*----------------------------------------------------------------------------
+  Thread 'Display': LCD display handler
+ *---------------------------------------------------------------------------*/
+//static __NO_RETURN void Display (void *arg) {
+////  static uint8_t ip_addr[NET_ADDR_IP6_LEN];
+////  static char    ip_ascii[40];
+////  static char    buf[24];
+////  uint32_t x = 0;
+
+//  (void)arg;
+//  
+//  
+
+//  while(1) {
+//		RTC_CalendarShow(aShowTime,aShowDate);
+//		Delay(250);
+//  }
+//}
+
+/*----------------------------------------------------------------------------
   Thread 'BlinkLed': Blink the LEDs on an eval board
  *---------------------------------------------------------------------------*/
 static __NO_RETURN void BlinkLed (void *arg) {

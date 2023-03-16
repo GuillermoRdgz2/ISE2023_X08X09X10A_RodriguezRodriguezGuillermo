@@ -189,25 +189,12 @@ void RTC_Alarm_IRQHandler(void)
   HAL_RTC_AlarmIRQHandler(&RtcHandle);
 }
 
-void HAL_RTC_AlarmIRQHandler(RTC_HandleTypeDef *RtcHandle)
-{
-  HAL_RTC_AlarmAEventCallback(RtcHandle);
-  
-}
 
 void HAL_RTC_AlarmAEventCallback(RTC_HandleTypeDef *RtcHandle)
 {
   //IT callback code. Green LED blinks during seconds and restart the alarm to 1 minute before.
+  RTC_SetMinutesAlarm();
 }
 
-
-
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

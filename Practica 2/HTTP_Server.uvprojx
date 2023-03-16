@@ -563,6 +563,16 @@
               <FileType>5</FileType>
               <FilePath>.\rtc.h</FilePath>
             </File>
+            <File>
+              <FileName>os_Timer_Alarms.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\os_Timer_Alarms.h</FilePath>
+            </File>
+            <File>
+              <FileName>os_Timer_Alarms.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\os_Timer_Alarms.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1141,6 +1151,16 @@
               <FileName>rtc.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\rtc.h</FilePath>
+            </File>
+            <File>
+              <FileName>os_Timer_Alarms.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\os_Timer_Alarms.h</FilePath>
+            </File>
+            <File>
+              <FileName>os_Timer_Alarms.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\os_Timer_Alarms.c</FilePath>
             </File>
           </Files>
         </Group>

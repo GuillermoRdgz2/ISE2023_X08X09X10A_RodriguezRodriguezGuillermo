@@ -110,6 +110,7 @@ int main(void)
      */
   RTC_PeripheralConfig();
   RTC_CalendarConfig();
+  RTC_SetMinutesAlarm();
 
 #ifdef RTE_CMSIS_RTOS2
   /* Initialize CMSIS-RTOS2 */
@@ -167,8 +168,8 @@ static void SystemClock_Config(void)
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 25U;
-  RCC_OscInitStruct.PLL.PLLN = 336U;
+  RCC_OscInitStruct.PLL.PLLM = 4U;
+  RCC_OscInitStruct.PLL.PLLN = 168U;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 7U;
   if(HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
