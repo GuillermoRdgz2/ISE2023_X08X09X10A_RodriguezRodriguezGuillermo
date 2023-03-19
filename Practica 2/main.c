@@ -41,6 +41,7 @@
 #include "main.h"
 #include "lcd.h"
 #include "rtc.h"
+#include "os_Timer_Alarms.h"
 #include <stdio.h>
 
 #ifdef RTE_CMSIS_RTOS2_RTX5
@@ -108,9 +109,6 @@ int main(void)
 
   /* Add your application code here
      */
-  RTC_PeripheralConfig();
-  RTC_CalendarConfig();
-  RTC_SetMinutesAlarm();
 
 #ifdef RTE_CMSIS_RTOS2
   /* Initialize CMSIS-RTOS2 */

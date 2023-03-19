@@ -17,6 +17,8 @@
 #include "Board_Buttons.h"              // ::Board Support:Buttons
 #include "LCD.h"
 #include "adc.h"
+#include "rtc.h"
+#include "os_Timer_Alarms.h"
 
 extern void RTC_CalendarShow(uint8_t *showtime, uint8_t *showdate);
 extern uint8_t aShowTime[50];
@@ -40,6 +42,8 @@ extern char lcd_text[2][20+1];
 
 extern osThreadId_t TID_Display;
 extern osThreadId_t TID_Led;
+extern osThreadId_t TID_RTC_Time;
+extern osTimerId_t timerAlarm_id;
 
 bool LEDrun;
 char lcd_text[2][20+1] = { "LCD line 1",
@@ -52,10 +56,12 @@ float voltage = 0;
 /* Thread IDs */
 osThreadId_t TID_Display;
 osThreadId_t TID_Led;
+osThreadId_t TID_RTC_Time;
 
 /* Thread declarations */
 static void BlinkLed (void *arg);
 static void Display  (void *arg);
+static void RTC_Time (void *arg);
 
 __NO_RETURN void app_main (void *arg);
 
@@ -94,14 +100,8 @@ void netDHCP_Notify (uint32_t if_num, uint8_t option, const uint8_t *val, uint32
   Thread 'Display': LCD display handler
  *---------------------------------------------------------------------------*/
 static __NO_RETURN void Display (void *arg) {
-//  static uint8_t ip_addr[NET_ADDR_IP6_LEN];
-//  static char    ip_ascii[40];
-//  static char    buf[24];
-//  uint32_t x = 0;
 
   (void)arg;
-  
-  
 
   while(1) {
 		RTC_CalendarShow(aShowTime,aShowDate);
@@ -110,23 +110,16 @@ static __NO_RETURN void Display (void *arg) {
 }
 
 /*----------------------------------------------------------------------------
-  Thread 'Display': LCD display handler
+  Thread 'RTC': RTC and alarm handler
  *---------------------------------------------------------------------------*/
-//static __NO_RETURN void Display (void *arg) {
-////  static uint8_t ip_addr[NET_ADDR_IP6_LEN];
-////  static char    ip_ascii[40];
-////  static char    buf[24];
-////  uint32_t x = 0;
+static __NO_RETURN void RTC_Time (void *arg) {
 
-//  (void)arg;
-//  
-//  
-
-//  while(1) {
-//		RTC_CalendarShow(aShowTime,aShowDate);
-//		Delay(250);
-//  }
-//}
+  while(1) {
+		osThreadFlagsWait(ALARM_ON,osFlagsWaitAny,osWaitForever);
+		osThreadFlagsClear(ALARM_ON);
+		osTimerStart(timerAlarm_id,500U);
+	}
+}
 
 /*----------------------------------------------------------------------------
   Thread 'BlinkLed': Blink the LEDs on an eval board
@@ -163,6 +156,11 @@ __NO_RETURN void app_main (void *arg) {
 	LCD_init();
 	LCD_Clean();
 	LCD_update();
+	
+	RTC_PeripheralConfig();
+	Init_Timer();
+	RTC_CalendarConfig();
+	RTC_SetMinutesAlarm();
  
 	ADC1_pins_F429ZI_config();
 	ADC_Init_Single_Conversion(&adchandle , ADC1); //ADC1 configuration
@@ -171,6 +169,7 @@ __NO_RETURN void app_main (void *arg) {
 
   TID_Led     = osThreadNew (BlinkLed, NULL, NULL);
   TID_Display = osThreadNew (Display,  NULL, NULL);
+	TID_RTC_Time= osThreadNew (RTC_Time, NULL, NULL);
 
   osThreadExit();
 }

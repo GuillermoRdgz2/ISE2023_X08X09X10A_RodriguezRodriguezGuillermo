@@ -28,6 +28,9 @@ extern bool LEDrun;
 extern char lcd_text[2][20+1];
 extern osThreadId_t TID_Display;
 
+extern uint8_t aShowTime[50];
+extern uint8_t aShowDate[50];
+
 // Local variables.
 static uint8_t P2;
 static uint8_t ip_addr[NET_ADDR_IP6_LEN];
@@ -376,6 +379,18 @@ uint32_t netCGI_Script (const char *env, char *buf, uint32_t buflen, uint32_t *p
       len = (uint32_t)sprintf (buf, "<checkbox><id>button%c</id><on>%s</on></checkbox>",
                                env[1], (get_button () & (1 << (env[1]-'0'))) ? "true" : "false");
       break;
+		
+		case 'z':
+			// RTC module from 'hora.cgx'
+			switch (env[2]) {
+        case '1':
+          len = (uint32_t)sprintf (buf, &env[4], aShowDate);
+          break;
+        case '2':
+          len = (uint32_t)sprintf (buf, &env[4], aShowTime);
+          break;
+      }
+			break;
   }
   return (len);
 }

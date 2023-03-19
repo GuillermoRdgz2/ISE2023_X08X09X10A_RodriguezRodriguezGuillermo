@@ -157,6 +157,12 @@ void RTC_SetAlarm(uint8_t hour, uint8_t minutes, uint8_t seconds)
   HAL_RTC_SetAlarm_IT(&RtcHandle,&salarmstructure,RTC_FORMAT_BCD);  
 }
 
+/**
+  * @brief  Set an alarm for the next minute. The alarm is set in the second 0 of the minute.
+  * @param  none
+  * @retval None
+  */
+
 void RTC_SetMinutesAlarm(void)
 {
   

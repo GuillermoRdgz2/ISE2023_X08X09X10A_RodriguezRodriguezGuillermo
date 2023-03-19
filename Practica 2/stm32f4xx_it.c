@@ -43,6 +43,8 @@
 #include "main.h"
 #include "stm32f4xx_it.h"
 #include "rtc.h"
+#include "cmsis_os2.h"
+#include "os_Timer_Alarms.h"
 #ifdef _RTE_
 #include "RTE_Components.h"             /* Component selection */
 #endif
@@ -60,7 +62,7 @@ extern RTC_HandleTypeDef RtcHandle;
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-
+extern osThreadId_t TID_RTC_Time;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -192,9 +194,8 @@ void RTC_Alarm_IRQHandler(void)
 
 void HAL_RTC_AlarmAEventCallback(RTC_HandleTypeDef *RtcHandle)
 {
-  //IT callback code. Green LED blinks during seconds and restart the alarm to 1 minute before.
-  RTC_SetMinutesAlarm();
+	RTC_SetMinutesAlarm();
+  osThreadFlagsSet(TID_RTC_Time,ALARM_ON);
 }
-
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
