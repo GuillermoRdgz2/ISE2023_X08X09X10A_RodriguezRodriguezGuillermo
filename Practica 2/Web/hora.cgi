@@ -4,8 +4,8 @@ t setTimeout("document.location=document.location",1000);
 t </script>
 t </head>
 i pg_header.inc
-t <h2 align=center><br>HORA Module Control</h2>
-t <p><font size="2">Esta pagina muestra la hora y fecha local.<br><br>
+t <h2 align=center><br>RTC Control</h2>
+t <p><font size="2">Hora y fecha actual del sistema.<br><br>
 t <form action=hora.cgi method=post name=cgi>
 t <input type=hidden value="lcd" name=pg>
 t <table border=0 width=99%><font size="3">
@@ -13,9 +13,9 @@ t <tr bgcolor=#aaccff>
 t  <th width=40%>Item</th>
 t  <th width=60%>Setting</th></tr>
 # Here begin data setting which is formatted in HTTP_CGI.C module
-t <tr><td><img src=pabb.gif>La hora es:</td>
+t <tr><td><img src=pabb.gif>Hora:</td>
 c z 1 <td><input type=text name=lcd1 size=20 maxlength=20 value="%s"></td></tr>
-t <tr><td><img src=pabb.gif>La fecha es:</TD>
+t <tr><td><img src=pabb.gif>Fecha:</TD>
 c z 2 <td><input type=text name=lcd2 size=20 maxlength=20 value="%s"></td></tr>
 t </font></table>
 # Here begin button definitions
